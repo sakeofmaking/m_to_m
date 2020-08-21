@@ -1,1 +1,1 @@
-Research how to recursively search directories without getting "hung up"
+Place m_to_m.py in directory of interest

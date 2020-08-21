@@ -1,6 +1,7 @@
 """
-Rename files and directories beginning with M###
-to new M### according to user
+M to M
+
+Rename files and directories beginning with M### to new M### according to user
 """
 
 import os
@@ -13,7 +14,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Initialize variables
 pattern = r'(^M)([\d]{3,4})(.*)'
-directory = '.git'
+directory = '.'
 
 
 # Request new M number from user
@@ -22,6 +23,7 @@ def new_m_nbr():
     return new_m
 
 
+# TODO: Rename directories too
 # Recursively search directories for files
 def search_dir(directory, new_m):
     # Change path to directory
@@ -29,19 +31,25 @@ def search_dir(directory, new_m):
     for file in os.listdir():
         if os.path.isdir(file):
             logging.debug('{} is a directory'.format(file))
-            # search_dir(file, new_m)
+            search_dir(file, new_m)
+            os.chdir('..')
         else:
             logging.debug('{} is a file'.format(file))
             result = re.search(pattern, file)
             if result:
                 new_name = 'M' + str(new_m) + result[3]
-                # os.rename(file, new_name)
-                logging.debug('{} renamed to {}'.format(file, new_name))
+                os.rename(file, new_name)
+                print('{} renamed to {}'.format(file, new_name))
 
 
 if __name__ == '__main__':
     user_input = new_m_nbr()
     while not (user_input.isnumeric()):
         user_input = new_m_nbr()
+
+    # Search initial directory for directories
+    # If no directories, break
+    # If directories, add to list of directories, change working directory to first in list
+    # Repeat and search for directories
 
     search_dir(directory, user_input)
